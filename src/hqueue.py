@@ -4,15 +4,15 @@ import asyncio
 
 class HistoryQueue:
     def __init__(self, history_size=None, max_backlog=0, loop=None):
-        """|asyncio.Queue| with history.
+        """``asyncio.Queue`` with history.
 
-        Objects put on a |HistoryQueue| are gathered in tuples,
+        Objects put on a ``HistoryQueue`` are gathered in tuples,
         with the first element being the next item on the queue,
         followed by items add previously.
 
-        |HistoryQueue| can also be thought of as as asynchronous |collections.deque|,
-        with |put| analogous to |deque.appendleft|
-        and |get| returning the entire deque (as a tuple).
+        ``HistoryQueue`` can also be thought of as as asynchronous ``collections.deque``,
+        with ``put`` analogous to ``deque.appendleft``
+        and ``get`` returning the entire deque (as a tuple).
 
         Up to ``history_size + 1`` items are returned in each tuple.
         If `history_size` is ``None``, then each tuple will contain the entire history of the queue.
@@ -20,21 +20,21 @@ class HistoryQueue:
         If `max_backlog` is less than or equal to zero, the queue size is infinite.
         If it is an integer greater than ``0``,
         then ``await put()``will block when the queue contains `max_backlog` items,
-        until an item is removed by |get|.
+        until an item is removed by ``get``.
 
         If the queue is empty, ``await get()`` will block until an item is added to the queue.
 
         Parameters
         ----------
         history_size : int, optional
-            The number of items, in addition to the "current" item, to return from |get|.
+            The number of items, in addition to the "current" item, to return from ``get``.
             When `history_size` is ``None``, then entire history is returned.
-            Serves a similar purpose as |collections.deque.maxlen|.
+            Serves a similar purpose as ``collections.deque.maxlen``.
         max_backlog : int, optional
             The number of items to save before the queue is considered full.
             If `max_backlog` is ``0``, the queue is never full.
-            Analogous to |asyncio.Queue.maxsize|.
-        loop : |asyncio.BaseEventLoop|, optional
+            Analogous to ``asyncio.Queue.maxsize``.
+        loop : ``asyncio.BaseEventLoop``, optional
             The event loop that will be managing the queue.
 
         Attributes
@@ -44,24 +44,24 @@ class HistoryQueue:
 
         Raises
         ------
-        |QueueEmpty|
-            When |get_nowait| is called on an empty queue.
-        |QueueFull|
-            When |put_nowait| is called on a full queue.
+        ``QueueEmpty``
+            When ``get_nowait`` is called on an empty queue.
+        ``QueueFull``
+            When ``put_nowait`` is called on a full queue.
 
         See Also
         --------
-        |asyncio.Queue|
-        |collections.deque|
+        ``asyncio.Queue``
+        ``collections.deque``
 
         Notes
         -----
-        This class is |not thread safe|.
+        This class is ``not thread safe``.
 
         Examples
         --------
-        For ease of illustration, in these examples we use |put_nowait| and |get_nowait|,
-        the synchronous counterparts of |put| and |wait|, respectively.
+        For ease of illustration, in these examples we use ``put_nowait`` and ``get_nowait``,
+        the synchronous counterparts of ``put`` and ``wait``, respectively.
         In a coroutine, ``await put()`` could be used to block until the queue is not full,
         and ``await get()`` to block until there is an item in the queue.
 
