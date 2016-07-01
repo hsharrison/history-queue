@@ -3,7 +3,7 @@ import asyncio
 
 
 class HistoryQueue:
-    def __init__(self, iterable=(), history_len=None, max_backlog=0, loop=None):
+    def __init__(self, history_len=None, max_backlog=0, loop=None):
         """|asyncio.Queue| with history.
 
         Objects put on a |HistoryQueue| are gathered in tuples,
@@ -26,13 +26,6 @@ class HistoryQueue:
 
         Parameters
         ----------
-        iterable : iterable, optional
-            The queue is initialized with items from `iterable`,
-            as if they had been put on the queue in the order given
-            (i.e., as if the last element in `iterable` is the "current" item).
-            If the desired behavior is to have the first element be the current item,
-            with the following items added to the backlog, instead start with an empty queue
-            and populate it with |put_many|.
         history_len : int, optional
             The number of items, in addition to the "current" item, to return from |get|.
             When `history_len` is ``None``, then entire history is returned.
@@ -88,24 +81,12 @@ class HistoryQueue:
         >>> hq.get_nowait()
         (3, 2, 1)
 
-        >>> hq = HistoryQueue(range(3), history_len=2)
-        >>> hq.get_nowait()
-        (2, 1, 0)
-        >>> hq.put_nowait(3)
-        >>> hq.get_nowait()
-        (3, 2, 1)
-
-        See the |docs| for an example using coroutines.
-
         """
         self.history_len = history_len
         self.max_backlog = max_backlog
 
-        self._deque = deque(reversed(iterable), history_len + 1 if history_len else None)
+        self._deque = deque(maxlen=history_len + 1 if history_len else None)
         self._queue = asyncio.Queue(maxsize=max_backlog, loop=loop)
-
-        if self._deque:
-            self._queue.put_nowait(self._as_tuple())
 
     def backlog_empty(self):
         """Return ``True`` if the queue is empty ,``False`` otherwise.

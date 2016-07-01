@@ -76,19 +76,10 @@ and |get| returning the entire deque (as a tuple).
     >>> hq.get_nowait()
     (3, 2, 1)
 
-    >>> hq = HistoryQueue(range(3), history_len=2)
-    >>> hq.get_nowait()
-    (2, 1, 0)
-    >>> hq.put_nowait(3)
-    >>> hq.get_nowait()
-    (3, 2, 1)
-
 For ease of illustration, in the above examples we use |put_nowait| and |get_nowait|,
 the synchronous counterparts of |put| and |wait|, respectively.
 In a coroutine, ``await put()`` could be used to block until the queue is not full,
 and ``await get()`` to block until there is an item in the queue.
-
-See the |docs| for an example using coroutines.
 
 See Also
 --------
