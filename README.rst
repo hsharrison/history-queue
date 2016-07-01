@@ -61,7 +61,7 @@ with |put| analogous to |deque.appendleft|
 and |get| returning the entire deque (as a tuple).
 
     >>> from hqueue import HistoryQueue
-    >>> hq = HistoryQueue(history_len=2)
+    >>> hq = HistoryQueue(history_size=2)
     >>> hq.put_nowait(0)
     >>> hq.put_nowait(1)
     >>> hq.get_nowait()

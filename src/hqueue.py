@@ -3,7 +3,7 @@ import asyncio
 
 
 class HistoryQueue:
-    def __init__(self, history_len=None, max_backlog=0, loop=None):
+    def __init__(self, history_size=None, max_backlog=0, loop=None):
         """|asyncio.Queue| with history.
 
         Objects put on a |HistoryQueue| are gathered in tuples,
@@ -14,8 +14,8 @@ class HistoryQueue:
         with |put| analogous to |deque.appendleft|
         and |get| returning the entire deque (as a tuple).
 
-        Up to ``history_len + 1`` items are returned in each tuple.
-        If `history_len` is ``None``, then each tuple will contain the entire history of the queue.
+        Up to ``history_size + 1`` items are returned in each tuple.
+        If `history_size` is ``None``, then each tuple will contain the entire history of the queue.
 
         If `max_backlog` is less than or equal to zero, the queue size is infinite.
         If it is an integer greater than ``0``,
@@ -26,9 +26,9 @@ class HistoryQueue:
 
         Parameters
         ----------
-        history_len : int, optional
+        history_size : int, optional
             The number of items, in addition to the "current" item, to return from |get|.
-            When `history_len` is ``None``, then entire history is returned.
+            When `history_size` is ``None``, then entire history is returned.
             Serves a similar purpose as |collections.deque.maxlen|.
         max_backlog : int, optional
             The number of items to save before the queue is considered full.
@@ -39,7 +39,7 @@ class HistoryQueue:
 
         Attributes
         ----------
-        history_len
+        history_size
         max_backlog
 
         Raises
@@ -66,7 +66,7 @@ class HistoryQueue:
         and ``await get()`` to block until there is an item in the queue.
 
         >>> from hqueue import HistoryQueue
-        >>> hq = HistoryQueue(history_len=2)
+        >>> hq = HistoryQueue(history_size=2)
         >>> hq.put_nowait(0)
         >>> hq.put_nowait(1)
         >>> hq.get_nowait()
@@ -82,10 +82,10 @@ class HistoryQueue:
         (3, 2, 1)
 
         """
-        self.history_len = history_len
+        self.history_size = history_size
         self.max_backlog = max_backlog
 
-        self._deque = deque(maxlen=history_len + 1 if history_len else None)
+        self._deque = deque(maxlen=history_size if history_size is None else history_size + 1)
         self._queue = asyncio.Queue(maxsize=max_backlog, loop=loop)
 
     def backlog_empty(self):
@@ -182,38 +182,12 @@ class HistoryQueue:
         when it is eventually returned.
 
         """
-        self._deque = deque(maxlen=self.history_len + 1)
-
-    async def put_many(self, iterable):
-        """Put many items on the queue, one at a time.
-        If the queue becomes full, wait for a spot to become available.
-
-        Parameters
-        ----------
-        iterable : iterable
-            Items to add to the queue.
-
-        """
-        for item in iterable:
-            await self.put(item)
-
-    def put_many_nowait(self, iterable):
-        """Put many items on the queue, one at a time.
-        If the queue becomes full, raise |QueueFull|.
-
-        Parameters
-        ----------
-        iterable : iterable
-            Items to add to the queue.
-
-        """
-        for item in iterable:
-            self.put_nowait(item)
+        self._deque = deque(maxlen=self.history_size + 1)
 
     def _as_tuple(self):
         return tuple(self._deque)
 
     def __repr__(self):
-        return '<{} at {} history_len={}, max_backlog={}>'.format(
-            type(self).__name__, hex(id(self)), self.history_len, self.max_backlog,
+        return '<{} at {} history_size={}, max_backlog={}>'.format(
+            type(self).__name__, hex(id(self)), self.history_size, self.max_backlog,
         )
