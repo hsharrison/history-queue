@@ -13,10 +13,6 @@ Overview
     * - package
       - |version| |downloads| |wheel| |supported-versions| |supported-implementations|
 
-.. |docs| image:: https://readthedocs.org/projects/history-queue/badge/?style=flat
-    :target: https://readthedocs.org/projects/history-queue
-    :alt: Documentation Status
-
 .. |travis| image:: https://travis-ci.org/hsharrison/history-queue.svg?branch=master
     :alt: Travis-CI Build Status
     :target: https://travis-ci.org/hsharrison/history-queue
