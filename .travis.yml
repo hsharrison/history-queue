@@ -16,7 +16,7 @@ install:
 script:
   - py.test
   - flake8
-after-success:
+after_success:
   - coveralls
 before_cache:
   - rm -rf $HOME/.cache/pip/log
