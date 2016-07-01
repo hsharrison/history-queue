@@ -1,7 +1,7 @@
 from collections import deque
 import asyncio
 
-__version__ = '0.1.0'
+__version__ = '0.2.0'
 
 class HistoryQueue:
     def __init__(self, history_size=None, max_backlog=0, loop=None):
