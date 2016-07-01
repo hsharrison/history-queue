@@ -236,21 +236,3 @@ class HistoryQueue:
         return '<{} at {} history_len={}, max_backlog={}>'.format(
             type(self).__name__, hex(id(self)), self.history_len, self.max_backlog,
         )
-
-    def __iter__(self):
-        return iter(self._deque)
-
-    def __len__(self):
-        return len(self._deque)
-
-    def __getitem__(self, key):
-        return self._deque[key]
-
-    def __bool__(self):
-        return bool(self._deque)
-
-    def __reversed__(self):
-        return reversed(self._deque)
-
-    def __contains__(self, x):
-        return x in self._deque
