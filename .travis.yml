@@ -12,7 +12,7 @@ before_install:
   - lsb_release -a
 install:
   - pip install .[test]
-  - pip install flake8
+  - pip install flake8 python-coveralls
 script:
   - py.test
   - flake8
