@@ -3,7 +3,7 @@ import asyncio
 
 
 class HistoryQueue:
-    def __init__(self, iterable=None, history_len=None, max_backlog=0, loop=None):
+    def __init__(self, iterable=(), history_len=None, max_backlog=0, loop=None):
         """|asyncio.Queue| with history.
 
         Objects put on a |HistoryQueue| are gathered in tuples,
@@ -101,10 +101,10 @@ class HistoryQueue:
         self.history_len = history_len
         self.max_backlog = max_backlog
 
-        self._deque = deque(reversed(iterable), history_len + 1)
+        self._deque = deque(reversed(iterable), history_len + 1 if history_len else None)
         self._queue = asyncio.Queue(maxsize=max_backlog, loop=loop)
 
-        if not self._deque:
+        if self._deque:
             self._queue.put_nowait(self._as_tuple())
 
     def backlog_empty(self):
@@ -199,7 +199,6 @@ class HistoryQueue:
         All items already put on the queue will remain,
         but the next item put on the queue will have no history associated with it
         when it is eventually returned.
-        The history will rebuild with only items put on the queue after calling `clear_history`.
 
         """
         self._deque = deque(maxlen=self.history_len + 1)
