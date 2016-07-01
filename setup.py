@@ -49,6 +49,6 @@ setup(
         'asyncio', 'deque', 'queue', 'history',
     ],
     extras_require={
-        'test': ['pytest', 'hypothesis', 'toolz'],
+        'test': ['pytest', 'pytest-cov', 'hypothesis', 'toolz'],
     }
 )
