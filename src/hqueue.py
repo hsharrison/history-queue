@@ -162,8 +162,14 @@ class HistoryQueue:
         item
 
         """
+        initial_deque = self._deque.copy()
         self._deque.appendleft(item)
-        self._queue.put_nowait(self._as_tuple())
+        try:
+            self._queue.put_nowait(self._as_tuple())
+        except asyncio.QueueFull:
+            # If the QueueFull exception is caught, pretend nothing happened.
+            self._deque = initial_deque
+            raise
 
     def backlog_size(self):
         """Number of items in the queue.
