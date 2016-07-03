@@ -1,11 +1,5 @@
-[paths]
-source = src/
-
 [run]
 branch = True
-source =
-    hqueue
-    tests
 parallel = true
 
 [report]
