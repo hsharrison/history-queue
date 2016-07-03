@@ -11,7 +11,7 @@ before_install:
   - uname -a
   - lsb_release -a
 install:
-  - pip install .[test]
+  - pip install -e .[test]
   - pip install flake8 coveralls
 script:
   - py.test
