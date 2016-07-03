@@ -1,7 +1,5 @@
 [paths]
-source =
-   src/hqueue
-   */site-packages/hqueue
+source = src/
 
 [run]
 branch = True
