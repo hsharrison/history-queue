@@ -12,13 +12,12 @@ before_install:
   - lsb_release -a
 install:
   - pip install -e .[test]
-  - pip install flake8 coveralls
+  - pip install flake8 python-coveralls
 script:
   - py.test
   - flake8
 after_success:
-  - coveralls
-  - coveralls debug
+  - coveralls -d .coverage.*
 before_cache:
   - rm -rf $HOME/.cache/pip/log
 cache:
