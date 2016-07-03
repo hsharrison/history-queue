@@ -18,6 +18,7 @@ script:
   - flake8
 after_success:
   - coveralls
+  - coveralls debug
 before_cache:
   - rm -rf $HOME/.cache/pip/log
 cache:
